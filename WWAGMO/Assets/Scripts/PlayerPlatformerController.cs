@@ -74,6 +74,7 @@ public class PlayerPlatformerController : PhysicsObject
             velocity.y = 0;
             gravityModifier = 0;
             rb2d.gravityScale = 0;
+            move.y = 0;
             if (velocity.x > 0)
             {
                 targetVelocity.x = maxSpeed * dashSpeed;
@@ -92,11 +93,20 @@ public class PlayerPlatformerController : PhysicsObject
 
         }
     }
-    void OnCollisionEnter2D(Collision2D col)
+
+    void OnCollisionStay2D(Collision2D other)
     {
-        if (col.gameObject.name.Equals("PimpleLg"))
+        if (other.gameObject.tag == "platform")
         {
-            velocity.y = jumpTakeOffSpeed * 1.5f;
+            transform.parent = other.transform;
+        }
+    }
+
+    void OnCollisionExit2D(Collision2D other)
+    {
+        if (other.gameObject.tag == "platform")
+        {
+            transform.parent = null;
         }
     }
 }
