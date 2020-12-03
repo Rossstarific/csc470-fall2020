@@ -7,8 +7,9 @@ public class FallController : MonoBehaviour
 	Rigidbody2D rb;
 	[SerializeField] private Animator animator;
 	bool isIdle;
-	public float distFromTop = 0.3f;
 	private Vector2 initialPosition;
+	private Vector2 playerColPointY;
+	private Vector2 playerNewPos;
 
 	// Use this for initialization
 	void Start()
@@ -22,19 +23,22 @@ public class FallController : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
-		if (col.GetContact(0).point.y > transform.position.y + distFromTop) {
-			if (col.gameObject.name.Equals("Player"))
+		if (col.gameObject.tag.Equals("Player"))
+		{
+			playerColPointY = col.gameObject.transform.GetChild(1).gameObject.transform.position;
+			if (playerColPointY.y > transform.position.y)
 			{
 				GetComponent<UpDownMove>().enabled = false;
 				animator.SetBool("isIdle", false);
 				Invoke("DropPlatform", 0.5f);
-
+				Invoke("DespawnPlatform", 5f);
+				Invoke("RespawnPlatform", 10f);
 			}
 		}
 
-		if (col.gameObject.name.Equals("Ground"))
+		else if (col.gameObject.name.Equals("Ground"))
 		{
-			Invoke("LandPlatform", 0);
+			rb.isKinematic = true;
 			Invoke("DespawnPlatform", 5f);
 			Invoke("RespawnPlatform", 10f);
 		}
@@ -45,11 +49,6 @@ public class FallController : MonoBehaviour
 		rb.isKinematic = false;
 	}
 
-	void LandPlatform()
-	{
-		rb.isKinematic = true;
-	}
-
 	void DespawnPlatform()
 	{
 		gameObject.SetActive(false);
@@ -57,6 +56,7 @@ public class FallController : MonoBehaviour
 
 	void RespawnPlatform()
 	{
+		rb.isKinematic = true;
 		gameObject.transform.position = initialPosition;
 		gameObject.SetActive(true);
 		animator.SetBool("isIdle", true);

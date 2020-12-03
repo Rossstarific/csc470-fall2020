@@ -6,12 +6,12 @@ public class PhysicsObject : MonoBehaviour
 {
 
     public float minGroundNormalY = .65f;
-    public float gravityModifier = 1f;
+    public float gravityModifier = 4f;
 
     protected Vector2 targetVelocity;
     protected bool grounded;
     protected Vector2 groundNormal;
-    protected Rigidbody2D rb2d;
+    public Rigidbody2D rb2d;
     public Vector2 velocity;
     protected ContactFilter2D contactFilter;
     protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];

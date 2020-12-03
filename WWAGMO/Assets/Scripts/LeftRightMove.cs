@@ -7,7 +7,8 @@ public class LeftRightMove : MonoBehaviour
     // Start is called before the first frame update
     private Vector2 initialPosition;
     private SpriteRenderer spriteRenderer;
-    int direction = -1;
+    private Rigidbody2D rb2D;
+    public int direction = -1;
     public float maxRange = 1;
     public float minRange = 1;
     public float moveSpeed = 1;
@@ -16,7 +17,8 @@ public class LeftRightMove : MonoBehaviour
     void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        initialPosition = transform.position;
+        rb2D = GetComponent<Rigidbody2D>();
+        initialPosition = rb2D.position;
         maxDist = initialPosition.x + maxRange;
         minDist = initialPosition.x - minRange;
     }
@@ -28,18 +30,18 @@ public class LeftRightMove : MonoBehaviour
         {
             case -1:
                 //Moving Left
-                if (transform.position.x > minDist)
+                if (rb2D.position.x > minDist)
                 {
-                    GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
+                     GetComponent<Rigidbody2D>().velocity = new Vector2(-moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
                 }
                 else
                 {
                     direction = 1;
                 }
-                break;
+            break;
             case 1:
                 //Moving Right
-                if (transform.position.x < maxDist)
+                if (rb2D.position.x < maxDist)
                 {
                     GetComponent<Rigidbody2D>().velocity = new Vector2(moveSpeed, GetComponent<Rigidbody2D>().velocity.y);
                 }
