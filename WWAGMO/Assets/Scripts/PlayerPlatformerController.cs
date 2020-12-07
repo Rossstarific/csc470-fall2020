@@ -177,6 +177,13 @@ public class PlayerPlatformerController : PhysicsObject
         StartCoroutine("LifeEmpty");
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.gameObject.tag.Equals("EndFlag"))
+        {
+            StartCoroutine("GameWin");
+        }
+    }
     IEnumerator LifeEmpty()
     {
         if (healthCount == 0)
@@ -192,11 +199,19 @@ public class PlayerPlatformerController : PhysicsObject
             gameObject.GetComponentInChildren<Animator>().enabled = false;
             gameObject.GetComponentInChildren<SpriteRenderer>().enabled = false;
             yield return new WaitForSeconds(2);
-            SceneManager.LoadScene("HellWorldLvl1");
+            SceneManager.LoadScene("StartMenu");
         } else
         {
             yield return null;
         }
+    }
+
+    IEnumerator GameWin()
+    {
+        yield return new WaitForSeconds(1);
+        inputEnabled = false;
+        yield return new WaitForSeconds(2);
+        SceneManager.LoadScene("End");
     }
 }
 

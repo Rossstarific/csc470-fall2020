@@ -16,6 +16,7 @@ public class PhysicsObject : MonoBehaviour
     protected ContactFilter2D contactFilter;
     protected RaycastHit2D[] hitBuffer = new RaycastHit2D[16];
     protected List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>(16);
+    private Vector2 playerColPointY;
 
 
     protected const float minMoveDistance = 0.001f;
@@ -74,7 +75,15 @@ public class PhysicsObject : MonoBehaviour
             hitBufferList.Clear();
             for (int i = 0; i < count; i++)
             {
-                hitBufferList.Add(hitBuffer[i]);
+                // This line and the if statement will check if a platform has a PlatformEffector2D.
+                // If it does, it will allow the player to jump up from underneath, but not fall through
+                // the top surface
+                PlatformEffector2D platform = hitBuffer[i].collider.GetComponent<PlatformEffector2D>();
+                playerColPointY = gameObject.transform.GetChild(1).gameObject.transform.position;
+                if (!platform || (hitBuffer[i].normal == Vector2.up && playerColPointY.y > hitBuffer[i].collider.bounds.max.y && velocity.y < 0 && yMovement))
+                {
+                    hitBufferList.Add(hitBuffer[i]);
+                }
             }
 
             for (int i = 0; i < hitBufferList.Count; i++)

@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Ground
   - Zit
+  - EndFlag
   layers:
   - Default
   - TransparentFX
